@@ -1,0 +1,43 @@
+﻿@model WeatherResponse
+<style>
+
+body {
+  font-family: Roboto, sans-serif;
+}
+
+
+</style>
+<div class="container text-center">
+    <h2>Weather Forecast</h2>
+    <form asp-action="Index" method="post">
+        <div class="form-group m-3">
+            <select name="cityName" class="form-Control" required>
+                <option value="">Select City</option>
+                @foreach (var city in ViewBag.City as SelectList)
+                {
+                    <option value="@city.Value">@city.Text</option>
+                }
+            </select>
+            @* <input type="text" name="cityName" class="form-control" placeholder="Enter City..." required/> *@
+        </div>
+        <button type="submit" class="btn btn-primary">Get Weather</button>
+    </form>
+
+    @if (Model != null)
+    {
+        <div class="mt-4">
+            <h4>Current Weather in @Model.Name (@Model.Sys.Country)</h4>
+            <p><strong>Temperature:</strong> @Model.Main.Temp °C (Feels like: @Model.Main.FeelsLike °C)</p>
+            <p><strong>Weather:</strong> @Model.Weather.First().Description (@Model.Weather.First().Main)</p>
+            @* <img src="http://openweathermap.org/img/wn/@Model.Weather.First().Icon@2x.png" alt="Weather Icon" /> *@
+            <p><strong>Humidity:</strong> @Model.Main.Humidity %</p>
+            <p><strong>Pressure:</strong> @Model.Main.Pressure hPa</p>
+            <p><strong>Wind Speed:</strong> @Model.Wind.Speed m/s (Gust: @Model.Wind.Gust m/s)</p>
+            <p><strong>Cloudiness:</strong> @Model.Clouds.All %</p>
+            <p><strong>Visibility:</strong> @Model.Visibility meters</p>
+            <p><strong>Sunrise:</strong> @DateTimeOffset.FromUnixTimeSeconds(Model.Sys.Sunrise).ToLocalTime()</p>
+            <p><strong>Sunset:</strong> @DateTimeOffset.FromUnixTimeSeconds(Model.Sys.Sunset).ToLocalTime()</p>
+        </div>
+        <div id="chart"></div>
+    }
+</div>
